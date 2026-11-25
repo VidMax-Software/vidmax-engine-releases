@@ -37,7 +37,7 @@ This milestone adds a daily, read-only upstream release monitor and the public `
 
 ## Workflow
 
-- Runs daily at 03:17 UTC and supports manual `workflow_dispatch`. Scheduled events execute from the repository default branch; the job is intentionally restricted to `main`. Keep `main` as the repository default branch.
+- Runs daily at 05:30 AM IST (00:00 UTC) and supports manual `workflow_dispatch`. Scheduled events execute from the repository default branch; the job is intentionally restricted to `main`. Keep `main` as the repository default branch.
 - Uses `ubuntu-24.04`, the current Node.js 22 release line and GnuPG.
 - Uses only the repository-scoped `GITHUB_TOKEN` available to the checkout/publish action; the monitor script does not read or forward that token to upstream requests.
 - `GITHUB_TOKEN` requires `contents: write` for the snapshot commit. No PAT, GitHub App private key, Cloudflare secret, D1 access or Worker secret is required.
