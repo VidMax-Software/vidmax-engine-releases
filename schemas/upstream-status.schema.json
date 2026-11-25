@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/VidMax-Software/vidmax-engine-releases/main/schemas/upstream-status.schema.json",
+  "title": "VidMax upstream status",
+  "description": "Public, read-only snapshot of upstream yt-dlp and Gyan.dev FFmpeg release metadata and the verification evidence collected by the daily VidMax monitor.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "status", "generated_at", "last_checked_at", "monitor", "components"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "status": { "const": "success" },
+    "generated_at": { "$ref": "#/$defs/utcDateTime" },
+    "last_checked_at": { "$ref": "#/$defs/utcDateTime" },
+    "monitor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "workflow", "repository", "commit_sha", "run_id", "run_attempt", "trigger"],
+      "properties": {
+        "name": { "const": "VidMax upstream release monitor" },
+        "workflow": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "repository": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "commit_sha": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "run_id": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "run_attempt": { "type": "integer", "minimum": 1 },
+        "trigger": { "enum": ["schedule", "workflow_dispatch", "local"] }
+      }
+    },
+    "components": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ytdlp", "ffmpeg"],
+      "properties": {
+        "ytdlp": { "$ref": "#/$defs/ytdlp" },
+        "ffmpeg": { "$ref": "#/$defs/ffmpeg" }
+      }
+    }
+  },
+  "$defs": {
+    "utcDateTime": { "type": "string", "format": "date-time", "pattern": "Z$" },
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "httpsUrl": { "type": "string", "format": "uri", "pattern": "^https://" },
+    "commonRelease": {
+      "type": "object",
+      "required": ["component", "display_name", "version", "release_date", "published_at", "release_url", "source_url", "asset_name", "size_bytes", "sha256", "last_checked_at", "metadata_sources", "security"],
+      "properties": {
+        "component": { "type": "string" },
+        "display_name": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "version": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "release_date": { "type": "string", "format": "date", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+        "published_at": { "$ref": "#/$defs/utcDateTime" },
+        "release_url": { "$ref": "#/$defs/httpsUrl" },
+        "source_url": { "$ref": "#/$defs/httpsUrl" },
+        "asset_name": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "size_bytes": { "type": "integer", "minimum": 1 },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "last_checked_at": { "$ref": "#/$defs/utcDateTime" },
+        "metadata_sources": { "type": "array", "minItems": 3, "maxItems": 3, "items": { "$ref": "#/$defs/httpsUrl" } }
+      }
+    },
+    "ytdlp": {
+      "allOf": [
+        { "$ref": "#/$defs/commonRelease" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "component": { "const": "YtDlp" },
+            "display_name": {}, "version": {}, "release_date": {}, "published_at": {}, "release_url": {}, "source_url": {},
+            "asset_name": { "const": "yt-dlp.exe" }, "size_bytes": { "type": "integer", "minimum": 1, "maximum": 104857600 },
+            "sha256": {}, "last_checked_at": {}, "metadata_sources": {},
+            "security": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["status", "verification_method", "publisher_signature_verified", "signing_key_fingerprint", "signer_fingerprint", "signed_checksum_file", "signature_file", "signed_checksum_sha256", "signature_file_sha256", "github_asset_digest_sha256", "github_asset_digest_match", "assurance_note"],
+              "properties": {
+                "status": { "const": "verified" },
+                "verification_method": { "const": "openpgp_detached_signature" },
+                "publisher_signature_verified": { "const": true },
+                "signing_key_fingerprint": { "const": "AC0CBBE6848D6A873464AF4E57CF65933B5A7581" },
+                "signer_fingerprint": { "type": "string", "pattern": "^[A-Fa-f0-9]{40,64}$" },
+                "signed_checksum_file": { "const": "SHA2-256SUMS" },
+                "signature_file": { "const": "SHA2-256SUMS.sig" },
+                "signed_checksum_sha256": { "$ref": "#/$defs/sha256" },
+                "signature_file_sha256": { "$ref": "#/$defs/sha256" },
+                "github_asset_digest_sha256": { "oneOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] },
+                "github_asset_digest_match": { "oneOf": [{ "const": true }, { "type": "null" }] },
+                "assurance_note": { "type": "string", "minLength": 1, "maxLength": 2000 }
+              }
+            }
+          },
+          "required": ["security"]
+        }
+      ]
+    },
+    "ffmpeg": {
+      "allOf": [
+        { "$ref": "#/$defs/commonRelease" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "component": { "const": "FFmpeg" },
+            "display_name": {}, "version": {}, "release_date": {}, "published_at": {}, "release_url": {}, "source_url": {},
+            "asset_name": { "type": "string", "pattern": "^ffmpeg-[0-9]+\\.[0-9]+(?:\\.[0-9]+)?-full_build\\.7z$" },
+            "size_bytes": { "type": "integer", "minimum": 1, "maximum": 629145600 },
+            "sha256": {}, "last_checked_at": {}, "metadata_sources": {},
+            "security": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["status", "verification_method", "publisher_signature_verified", "github_asset_digest_sha256", "gyan_sidecar_sha256", "checksums_match", "sidecar_source_url", "assurance_note"],
+              "properties": {
+                "status": { "const": "cross_checked" },
+                "verification_method": { "const": "github_asset_digest_vs_gyan_sidecar" },
+                "publisher_signature_verified": { "const": false },
+                "github_asset_digest_sha256": { "$ref": "#/$defs/sha256" },
+                "gyan_sidecar_sha256": { "$ref": "#/$defs/sha256" },
+                "checksums_match": { "const": true },
+                "sidecar_source_url": { "const": "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-full.7z.sha256" },
+                "assurance_note": { "type": "string", "minLength": 1, "maxLength": 2000 }
+              }
+            }
+          },
+          "required": ["security"]
+        }
+      ]
+    }
+  }
+}
