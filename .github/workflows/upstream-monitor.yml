@@ -3,7 +3,7 @@ name: VidMax upstream release monitor
 on:
   schedule:
     # Daily at 05:30 AM India Standard Time.
-    - cron: '5 3 * * *'
+    - cron: '20 3 * * *'
   workflow_dispatch: {}
 
 permissions:
