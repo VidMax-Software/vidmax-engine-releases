@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
   "status": "success",
-  "generated_at": "2026-11-26T05:11:29.919Z",
-  "last_checked_at": "2026-11-26T05:11:29.919Z",
+  "generated_at": "2026-11-27T00:15:39.610Z",
+  "last_checked_at": "2026-11-27T00:15:39.610Z",
   "monitor": {
     "name": "VidMax upstream release monitor",
     "workflow": "VidMax upstream release monitor",
     "repository": "VidMax-Software/vidmax-engine-releases",
-    "commit_sha": "099562ca08c3d2494f98491e636b629eb5bc79de",
-    "run_id": "45759933263",
+    "commit_sha": "22831684e39510401d29018e6c8058e9b9b51568",
+    "run_id": "45915659463",
     "run_attempt": 1,
     "trigger": "workflow_dispatch"
   },
@@ -24,7 +24,7 @@
       "asset_name": "yt-dlp.exe",
       "size_bytes": 23627865,
       "sha256": "622ed48023cac1daa52a3bf3a6ac38f03514de214b5f0fa069389fd0f6d17e5c",
-      "last_checked_at": "2026-11-26T05:11:29.655Z",
+      "last_checked_at": "2026-11-27T00:15:39.220Z",
       "metadata_sources": [
         "https://api.github.com/repos/yt-dlp/yt-dlp/releases/latest",
         "https://github.com/yt-dlp/yt-dlp/releases/download/2026.11.23/SHA2-256SUMS",
@@ -56,7 +56,7 @@
       "asset_name": "ffmpeg-9.1-full_build.7z",
       "size_bytes": 75452955,
       "sha256": "1a86f2c8b51b4990ae9a0b0f8bd4f345f5c79389d293ac3fda128a58ec507b16",
-      "last_checked_at": "2026-11-26T05:11:29.919Z",
+      "last_checked_at": "2026-11-27T00:15:39.610Z",
       "metadata_sources": [
         "https://www.gyan.dev/ffmpeg/builds/release-version",
         "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-full.7z.sha256",
